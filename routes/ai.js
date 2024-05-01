@@ -66,11 +66,6 @@ router.post('/', cache('2 minutes'), async (req, res, next) => {
     const response = await result.response;
     const text = response.text();
 
-    // Log in dev mode
-    if (process.env.NODE_ENV !== 'production') {
-      console.log("Params: " + req.params + " - Queries: " + req.query);
-    }
-
     res.status(200).json(text);
   } catch (error) {
     next(error);
