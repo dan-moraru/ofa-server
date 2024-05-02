@@ -1,4 +1,5 @@
 const express = require('express');
+const compression = require('compression');
 const cors = require('cors');
 const rateLimit = require('express-rate-limit');
 require('dotenv').config();
@@ -9,6 +10,9 @@ const healthRoute = require('./routes/health');
 const PORT = process.env.PORT || 5000;
 
 const app = express();
+
+// Enable compression
+app.use(compression());
 
 // Rate limiting
 const limiter = rateLimit({
@@ -25,7 +29,7 @@ app.use(cors());
 app.use(express.static('public'));
 
 // Routes
-app.use('/api', aiRoute);
+app.use('/ofa', aiRoute);
 app.use('/health', healthRoute);
 
 // Error handler middleware

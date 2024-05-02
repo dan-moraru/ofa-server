@@ -9,9 +9,15 @@ const GOOGLE_AI_KEY = process.env.GOOGLE_AI_KEY;
 // Init cache
 let cache = apicache.middleware;
 
-router.post('/', cache('2 minutes'), async (req, res, next) => {
+router.post('/ai/:game/:username', cache('2 minutes'), async (req, res, next) => {
   try {
     const { prompt } = req.query;
+    const game = req.params.game;
+    let username = req.params.username;
+
+    if (username === 'undefined') {
+        username = "Player";
+    }
 
     const generationConfig = {
         temperature: 1,
@@ -48,11 +54,13 @@ router.post('/', cache('2 minutes'), async (req, res, next) => {
         history: [
             {
                 role: "user",
-                parts: [{ text: "Hello, I am a Warframe player" }],
+                parts: [{ 
+                    text: `My username is ${username} and I am a ${game} player` 
+                }],
             },
             {
                 role: "model",
-                parts: [{ text: "Hey, what would you like to know?" }],
+                parts: [{ text: `Hello ${username}, I shall help you along your journey` }],
             },
         ],
     });
