@@ -4,6 +4,7 @@ const rateLimit = require('express-rate-limit');
 require('dotenv').config();
 const errorHandler = require('./middleware/error');
 const aiRoute = require('./routes/ai');
+const healthRoute = require('./routes/health');
 
 const PORT = process.env.PORT || 5000;
 
@@ -25,6 +26,7 @@ app.use(express.static('public'));
 
 // Routes
 app.use('/api', aiRoute);
+app.use('/health', healthRoute);
 
 // Error handler middleware
 app.use(errorHandler);
