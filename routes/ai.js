@@ -9,11 +9,27 @@ const GOOGLE_AI_KEY = process.env.GOOGLE_AI_KEY;
 // Init cache
 let cache = apicache.middleware;
 
-router.post('/ai/:game/:username', cache('2 minutes'), async (req, res, next) => {
+router.post('/context', cache('1 minutes'), async (req, res, next) => {
+    try{
+        const context = req.body;
+        console.log(context);
+
+        res.status(204);
+    } catch (error) {
+        next(error);
+    }
+});
+
+router.post('/:game/:username', cache('2 minutes'), async (req, res, next) => {
   try {
     const { prompt } = req.query;
     const game = req.params.game;
     let username = req.params.username;
+    
+    if (prompt == null) {
+        res.status(400).json({message: 'Please use query param for prompt', status: 400});
+        return;
+    }
 
     if (username === 'undefined') {
         username = "Player";
@@ -55,12 +71,12 @@ router.post('/ai/:game/:username', cache('2 minutes'), async (req, res, next) =>
             {
                 role: "user",
                 parts: [{ 
-                    text: `My username is ${username} and I am a ${game} player` 
+                    text: `My username/name is ${username} and I am a ${game} player` 
                 }],
             },
             {
                 role: "model",
-                parts: [{ text: `Hello ${username}, I shall help you along your journey` }],
+                parts: [{ text: `Hello ${username}, I am here to help and guide you` }],
             },
         ],
     });
