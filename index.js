@@ -1,4 +1,6 @@
 const express = require('express');
+const bodyParser = require('body-parser');
+const compression = require('compression');
 const cors = require('cors');
 const rateLimit = require('express-rate-limit');
 require('dotenv').config();
@@ -21,11 +23,16 @@ app.set('trust proxy', 1);
 // Enable cors
 app.use(cors());
 
+// Enable compression and body parsing
+app.use(compression());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: true}));
+
 // Set static folder
 app.use(express.static('public'));
 
 // Routes
-app.use('/api', aiRoute);
+app.use('/ofa', aiRoute);
 app.use('/health', healthRoute);
 
 // Error handler middleware
