@@ -5,12 +5,29 @@ const cors = require('cors');
 const rateLimit = require('express-rate-limit');
 require('dotenv').config();
 const errorHandler = require('./middleware/error');
+const session = require('express-session');
 const aiRoute = require('./routes/ai');
 const healthRoute = require('./routes/health');
 
 const PORT = process.env.PORT || 5000;
+const SECRET = process.env.SECRET;
 
 const app = express();
+
+// Enable compression and body parsing
+app.use(compression());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: true}));
+
+// Set static folder
+app.use(express.static('public'));
+
+app.use(session({
+  secret: SECRET,
+  resave: false,
+  saveUninitialized: true,
+  ttl: 18000, // 5 Hrs
+}));
 
 // Rate limiting
 const limiter = rateLimit({
@@ -22,14 +39,6 @@ app.set('trust proxy', 1);
 
 // Enable cors
 app.use(cors());
-
-// Enable compression and body parsing
-app.use(compression());
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended: true}));
-
-// Set static folder
-app.use(express.static('public'));
 
 // Routes
 app.use('/ofa', aiRoute);
