@@ -1,30 +1,20 @@
 const express = require('express');
 const router = express.Router();
-const apicache = require('apicache');
+//const apicache = require('apicache');
 
 const { GoogleGenerativeAI, HarmCategory, HarmBlockThreshold } = require('@google/generative-ai');
 
 const GOOGLE_AI_KEY = process.env.GOOGLE_AI_KEY;
 
-// Init cache
-let cache = apicache.middleware;
+// Cache
+//let cache = apicache.middleware;
 
-router.post('/context', cache('1 minutes'), async (req, res, next) => {
-    try{
-        const context = req.body;
-        console.log(context);
-
-        res.status(204);
-    } catch (error) {
-        next(error);
-    }
-});
-
-router.post('/:game/:username', cache('2 minutes'), async (req, res, next) => {
+router.post('/:game/:username', async (req, res, next) => {
   try {
     const { prompt } = req.query;
     const game = req.params.game;
     let username = req.params.username;
+    const context = req.body;
     
     if (prompt == null) {
         res.status(400).json({message: 'Please use query param for prompt', status: 400});
@@ -71,7 +61,7 @@ router.post('/:game/:username', cache('2 minutes'), async (req, res, next) => {
             {
                 role: "user",
                 parts: [{ 
-                    text: `My username/name is ${username} and I am a ${game} player` 
+                    text: `My username/name is ${username} and I am a ${game} player. Here is some extra information that might help you: ${JSON.stringify(context)}` 
                 }],
             },
             {
