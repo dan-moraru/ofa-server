@@ -9,27 +9,12 @@ const GOOGLE_AI_KEY = process.env.GOOGLE_AI_KEY;
 // Cache
 //let cache = apicache.middleware;
 
-router.post('/context', async (req, res, next) => {
-    try{
-        const context = req.body;
-        //console.log(context);
-
-        req.session.context = context;
-
-        res.status(201).json({status: "OK"});
-    } catch (error) {
-        next(error);
-    }
-});
-
 router.post('/:game/:username', async (req, res, next) => {
   try {
     const { prompt } = req.query;
     const game = req.params.game;
     let username = req.params.username;
-
-    const context = req.session.context;
-    console.log("context new: " + JSON.stringify(context));
+    const context = req.body;
     
     if (prompt == null) {
         res.status(400).json({message: 'Please use query param for prompt', status: 400});
@@ -76,7 +61,7 @@ router.post('/:game/:username', async (req, res, next) => {
             {
                 role: "user",
                 parts: [{ 
-                    text: `My username/name is ${username} and I am a ${game} player` 
+                    text: `My username/name is ${username} and I am a ${game} player. Here is some extra information that might help you: ${JSON.stringify(context)}` 
                 }],
             },
             {

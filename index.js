@@ -26,7 +26,11 @@ app.use(session({
   secret: SECRET,
   resave: false,
   saveUninitialized: true,
-  ttl: 18000, // 5 Hrs
+  name: "ofa-session",
+  cookie: {
+    //secure: true,
+    maxAge: 6 * 60 * 60 * 1000 // 6 Hrs
+  },
 }));
 
 // Rate limiting
