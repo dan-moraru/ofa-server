@@ -60,9 +60,14 @@ router.post('/:game/:username', async (req, res, next) => {
         history: [
             {
                 role: "user",
-                parts: [{ 
-                    text: `My username/name is ${username} and I am a ${game} player. Here is some extra information that might help you: ${JSON.stringify(context)}` 
-                }],
+                parts: [
+                    { 
+                        text: `My username/name is ${username} and I am a ${game} player.` 
+                    },
+                    {
+                        text: `Here is some extra information that might help you: ${JSON.stringify(context)}.`
+                    }
+                ],
             },
             {
                 role: "model",
