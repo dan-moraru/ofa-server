@@ -5,7 +5,6 @@ const cors = require('cors');
 const rateLimit = require('express-rate-limit');
 require('dotenv').config();
 const errorHandler = require('./middleware/error');
-const session = require('express-session');
 const aiRoute = require('./routes/ai');
 const healthRoute = require('./routes/health');
 
@@ -21,17 +20,6 @@ app.use(bodyParser.urlencoded({extended: true}));
 
 // Set static folder
 app.use(express.static('public'));
-
-app.use(session({
-  secret: SECRET,
-  resave: false,
-  saveUninitialized: true,
-  name: "ofa-session",
-  cookie: {
-    //secure: true,
-    maxAge: 6 * 60 * 60 * 1000 // 6 Hrs
-  },
-}));
 
 // Rate limiting
 const limiter = rateLimit({
