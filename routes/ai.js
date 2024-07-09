@@ -15,6 +15,7 @@ router.post('/:game/:username', async (req, res, next) => {
     const game = req.params.game;
     let username = req.params.username;
     const context = req.body;
+    const currQuest = context.active_quest.split('/').pop();
     
     if (prompt == null) {
         res.status(400).json({message: 'Please use query param for prompt', status: 400});
@@ -65,13 +66,52 @@ router.post('/:game/:username', async (req, res, next) => {
                         text: `My username/name is ${username} and I am a ${game} player.` 
                     },
                     {
-                        text: `Here is some extra information that might help you: ${JSON.stringify(context)}.`
+                        text: `Here is some extra information that might help you:`
+                    },
+                    {
+                        text: `Platinum: ${JSON.stringify(context.platinum)}.`
+                    },
+                    {
+                        text: `Credits: ${JSON.stringify(context.credits)}.`
+                    },
+                    {
+                        text: `Pending recipes: ${JSON.stringify(context.pending_recipes)}.`
+                    },
+                    {
+                        text: `Player level: ${JSON.stringify(context.player_level)}.`
+                    },
+                    {
+                        text: `Last region played: ${JSON.stringify(context.last_region_played)}.`
+                    },
+                    {
+                        text: `Did the tutorial: ${JSON.stringify(context.played_tutorial)}.`
+                    },
+                    {
+                        text: `Game settings: ${JSON.stringify(context.settings)}.`
+                    },
+                    {
+                        text: `Story mode choice: ${JSON.stringify(context.story_mode_choice)}.`
+                    },
+                    {
+                        text: `Active quest: ${currQuest}.`
+                    },
+                    {
+                        text: `Has reset account: ${JSON.stringify(context.has_reset_account)}.`
+                    },
+                    {
+                        text: `If my player level is equal or above 4 then I am not a beginner. If my account is reset than I am also not a beginner.`
+                    },
+                    {
+                        text: `Do not give me the details of my account unless I ask you or need help with an inquiry.`
+                    },
+                    {
+                        text: `Pretend to be the Lotus.`
                     }
                 ],
             },
             {
                 role: "model",
-                parts: [{ text: `Hello ${username}, I am here to help and guide you` }],
+                parts: [{ text: `Hello ${username}, I am here to help and guide you.` }],
             },
         ],
     });

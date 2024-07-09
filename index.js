@@ -9,7 +9,7 @@ const aiRoute = require('./routes/ai');
 const healthRoute = require('./routes/health');
 
 const PORT = process.env.PORT || 5000;
-const SECRET = process.env.SECRET;
+//const SECRET = process.env.SECRET;
 
 const app = express();
 
